@@ -36,6 +36,34 @@ Calculator.prototype.isBracket = function(data) {
 	}
 	return false;
 };
+
+Calculator.prototype.getWeight = function(data) {
+	var ret = -1;
+	switch(data){
+		case OPERATOR_ADD:
+			ret = 0;
+			break;
+		case OPERATOR_SUB:
+			ret = 1;
+			break;
+		case OPERATOR_MUL:
+			ret = 2;
+			break;
+		case OPERATOR_DIV:
+			ret = 3;
+			break;
+		case OPERATOR_POW:
+			ret = 4;
+			break;
+		case LEFT_BRACKET:
+			ret = 5;
+			break;
+		case RIGHT_BRACKET:
+			ret = 6;
+			break;
+	}
+	return ret;
+};
 Calculator.prototype.isValid = function() {
 	if(this.expression == null){
 		throw new Error("Can not find content!");
@@ -84,4 +112,16 @@ Calculator.prototype.string2Array = function() {
 	}
 	arr.push(RIGHT_BRACKET);
 	return arr;
+};
+
+function Node(data, left, right){
+	this.data = data;
+	this.left = left;
+	this.right = right;
+}
+function BinaryTree(array){
+	this.root = new Node(null,null,null);
+}
+BinaryTree.prototype.createTree = function() {
+	// body...
 };

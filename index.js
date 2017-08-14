@@ -10,7 +10,7 @@ const OPERATOR_POW = "^";
 
 function Calculator(arithm_expression){
 	this.expression = arithm_expression || null;
-	this.result = null;
+	this.result = '';
 }
 Calculator.prototype.isOperator = function(data) {
 	switch(data){
@@ -168,6 +168,7 @@ Calculator.prototype.calculate = function() {
 			tempStack.push(Count(num2,num1,rpnQueuelist[i]));
 		}
 	}
+	this.result = tempStack[0];
 	return tempStack[0];
 };
 

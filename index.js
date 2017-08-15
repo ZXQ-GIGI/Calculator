@@ -1,5 +1,6 @@
 'use strict'
 module.exports = Calculator;
+
 const LEFT_BRACKET = "(";
 const RIGHT_BRACKET = ")";
 const OPERATOR_ADD = "+";
@@ -7,22 +8,31 @@ const OPERATOR_SUB = "-";
 const OPERATOR_MUL = "*";
 const OPERATOR_DIV = "/";
 const OPERATOR_POW = "^";
+const OPERATOR_SIN = "sin";
+const OPERATOR_COS = "cos";
+const OPERATOR_TAN = "tan";
+const OPERATOR_LN = "ln";
+const OPERATOR_LG = "lg";
+const OPERATOR_LOG = "log";
+
 
 function Calculator(arithm_expression){
 	this.expression = arithm_expression || null;
 	this.result = '';
+	this.error = false;
 }
 Calculator.prototype.isOperator = function(data) {
 	switch(data){
 		case OPERATOR_ADD:
-			return true;
 		case OPERATOR_SUB:
-			return true;
 		case OPERATOR_MUL:
-			return true;
 		case OPERATOR_DIV:
-			return true;
 		case OPERATOR_POW:
+		case OPERATOR_SIN:
+		case OPERATOR_COS:
+		case OPERATOR_TAN:
+		case OPERATOR_LN:
+		case OPERATOR_LG:
 			return true;
 	}
 	return false;
@@ -30,7 +40,6 @@ Calculator.prototype.isOperator = function(data) {
 Calculator.prototype.isBracket = function(data) {
 	switch(data){
 		case LEFT_BRACKET:
-			return true;
 		case RIGHT_BRACKET:
 			return true;
 	}
@@ -50,15 +59,17 @@ Calculator.prototype.getPriority = function(data) {
 			break;
 		case OPERATOR_POW:
 			ret = 3;
+			break;
+		case OPERATOR_SIN:
+		case OPERATOR_COS:
+		case OPERATOR_TAN:
+			ret = 4;
 			break;	
 	}
 	return ret;
 };
 
 Calculator.prototype.isGreat = function(op1, op2) {
-	if(this.getPriority(op1) < 0 || this.getPriority(op2) < 0){
-		throw new Error("unexpected operator.");
-	}
 	if(this.getPriority(op1) > this.getPriority(op2)){
 		return true;
 	}
@@ -67,18 +78,20 @@ Calculator.prototype.isGreat = function(op1, op2) {
 	}
 };
 Calculator.prototype.isValid = function() {
-	if(this.expression == null){
-		throw new Error("Can not find content!");
-	}
 	var num = 0;
 	for(var i = 0; i < this.expression.length; i++){
 		if(i > 0 && i < this.expression.length - 1){
-			if(this.isOperator(this.expression[i]) && this.isOperator(this.expression[i-1])){
-				throw new Error("Expression error: " + this.expression[i]  + " is invalid.");
+			if(this.isOperator(this.expression[i]) 
+				&& this.isOperator(this.expression[i-1])){
+				markError(this.expression, i);
+				console.log("Error: '" + this.expression[i]  + "' is invalid.");
+				this.error = true;
 			}
 		}
 		if(i == this.expression.length - 1 && this.isOperator(this.expression[i])){
-			throw new Error("Expression error: " + this.expression[i]  + " is invalid.");
+			markError(this.expression, i);
+			console.log("Error: '" + this.expression[i]  + "' is invalid.");
+			this.error = true;
 		}
 		if(this.expression[i] == LEFT_BRACKET){
 			num++;
@@ -87,11 +100,15 @@ Calculator.prototype.isValid = function() {
 			num--;
 		}
 		if(num < 0){
-			throw new Error("Expression error: missing '('.");
+			markError(this.expression, i);
+			console.log("Error: missing '('!");
+			this.error = true;
 		}
 	}
 	if(num > 0){
-		throw new Error("Expression error: missing ')'.");
+		markError(this.expression, this.expression.length - 1);
+		console.log("Error: missing ')'!");
+		this.error = true;
 	}
 };
 Calculator.prototype.getExpression = function() {
@@ -130,7 +147,7 @@ Calculator.prototype.getReversePolish = function() {
 		}
 		else{
 			if(opStack.length == 0 || expression[i] == LEFT_BRACKET){
-				opStack.push(expression[i].slice());
+				opStack.push(expression[i]);
 			}
 			else if(expression[i] == RIGHT_BRACKET){
 				while(opStack[opStack.length - 1] != LEFT_BRACKET){
@@ -186,6 +203,19 @@ function Count(num1, num2, operator){
 			return Math.pow(num1,num2);
 	}
 	return false;
+}
+
+function markError(expression, errorPos){
+	console.log(expression);
+	var arr = new Array();
+	for(var i = 0; i < expression.length; i++){
+		if(i == errorPos){
+			arr[i] = "^";
+			break;
+		}
+		arr[i] = " ";	
+	}
+	console.log(arr.join(""));
 }
 
 

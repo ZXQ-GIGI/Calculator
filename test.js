@@ -2,7 +2,7 @@
 var readline = require('readline');
 var Calculator = require('./index.js');
 var num = '';
-
+console.log("Please input: ");
 var rl = readline.createInterface({
 	input:process.stdin,
 	output:process.stdout
@@ -11,10 +11,16 @@ var rl = readline.createInterface({
 rl.on("line",function(line){
 	switch(line.trim()){
 		case 'e':rl.close();
-		default: 
+		default: {
 			var result = new Calculator(line.trim().replace("ans",num));
-			console.log(result.calculate());
-			num = result.result;
+			var answer = result.calculate();
+			if(!result.error){
+				console.log(" = " + answer);
+				num = result.result;
+			}
+			result.error = false;	
+			console.log("\nPlease input:");
+		}		
 	}
 });
 

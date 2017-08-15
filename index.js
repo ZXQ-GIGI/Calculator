@@ -66,22 +66,15 @@ Calculator.prototype.getPriority = function(data) {
 		case OPERATOR_TAN:
 		case OPERATOR_LN:
 		case OPERATOR_LG:
-			ret = 2;
-			break;
 		case OPERATOR_POW:
-			ret = 3;
+			ret = 2;
 			break;	
 	}
 	return ret;
 };
 
 Calculator.prototype.isGreat = function(op1, op2) {
-	//if(this.getPriority(op1) < 0 || this.getPriority(op2) < 0){
-	//	throw new Error("222");
-	//}
-	//if(this.getPriority(op1) > this.getPriority(op2)){
 	return this.getPriority(op1) - this.getPriority(op2);
-	//}
 };
 Calculator.prototype.isValid = function() {
 	var num = 0;

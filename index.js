@@ -142,10 +142,19 @@ Calculator.prototype.getExpression = function() {
 		}
 	}
 	for(var i = 0; i < arr.length; i++){
-		if(!this.isOperator(arr[i]) 
-			&& !this.isBracket(arr[i]) 
+		if(!this.isOperator(arr[i]) && !this.isBracket(arr[i]) 
 			&& !this.isUnaryOperator(arr[i])){
-			arr[i] = parseFloat(arr[i]);
+			var num = arr[i];
+			if(isNaN(num)){
+				arr.shift();
+				markError(arr.join(''), i-1);
+				console.log(i-1);
+				console.log("Error: '" + arr[i-1]  + "' is invalid.");
+				this.error = true;
+				return '';
+			}else{
+				arr[i] = parseFloat(arr[i]);
+			}
 		}
 	}
 	arr.push(RIGHT_BRACKET);
@@ -189,7 +198,7 @@ Calculator.prototype.getReversePolish = function() {
 			}
 		}
 	}
-	console.log(rpnQueuelist);
+	//console.log(rpnQueuelist);
 	return rpnQueuelist;
 };
 

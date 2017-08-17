@@ -1,7 +1,7 @@
 'use strict'
 const fs = require('fs');
 var readline = require('readline');
-var Calculator = require('./index.js');
+var Calculator = require('../index.js');
 var content = new Content();
 //console.log(/^[_0-9a-zA-Z]+$/.test("9"));
 //console.log(process.argv);
@@ -12,7 +12,7 @@ var rl = readline.createInterface({
 });
 
 rl.on("line",function(line){
-	if(process.argv.length > 2){	
+	if(process.argv.length > 2){
 		count(line);
 	}else{
 		switch(line.trim()){
@@ -29,9 +29,9 @@ rl.on("line",function(line){
 						content.addNewItem(item);
 					}
 					result.error = false;
-				}		
+				}
 			}
-			console.log("\nPlease input:");		
+			console.log("\nPlease input:");
 		}
 	}
 });
@@ -140,5 +140,3 @@ Content.prototype.replaceTag = function(expression) {
 	}
 	return newExpression;
 };
-
-

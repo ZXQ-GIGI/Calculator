@@ -13,7 +13,7 @@ FileReader.prototype.readLine = function (callback) {
 			callback(null, err);
 		}
     else{
-      callback
+      callback();
     }
 	});
 };
